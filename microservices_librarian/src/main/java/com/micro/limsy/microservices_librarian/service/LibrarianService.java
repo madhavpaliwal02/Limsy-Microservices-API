@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Service;
 
 import com.micro.limsy.microservices_librarian.dto.LibrarianRequest;
@@ -12,38 +14,76 @@ import com.micro.limsy.microservices_librarian.model.Librarian;
 import com.micro.limsy.microservices_librarian.repository.LibrarianRepo;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class LibrarianService {
 
     private final LibrarianRepo librarianRepo;
 
+    /* Create a Librarian */
     public void createLibrarian(LibrarianRequest librarianReq) {
-        // TODO Auto-generated method stub
-        Librarian librarian = Librarian.builder()
-                .name(librarianReq.getName())
-                .email(librarianReq.getEmail())
-                .password(librarianReq.getPassword())
-                .gender(librarianReq.getGender())
-                .contact(librarianReq.getContact())
-                .libId(UUID.randomUUID().toString())
-                .date(new Date())
-                .build();
+        Librarian librarian = mapToLibrarian(librarianReq);
+        librarian.setLibId(UUID.randomUUID().toString());
+        librarian.setDate(new Date());
 
         librarianRepo.save(librarian);
-        log.info("Librarian {} is saved", librarian.getId());
     }
 
-    // Get all Librarians
+    /* Get all Librarians */
     public List<LibrarianResponse> getAllLibrarian() {
         List<Librarian> librarians = librarianRepo.findAll();
 
         return librarians.stream().map(this::mapToLibrarianResponse).toList();
     }
 
+    /* Get a Librarian */
+    public LibrarianResponse getLibrarian(String email) {
+        Librarian lib = librarianRepo.findAll().stream().filter(librarian -> librarian.getEmail().equals(email))
+                .findAny().get();
+
+        if (lib != null)
+            return mapToLibrarianResponse(lib);
+
+        throw new EntityNotFoundException("User Not Found...");
+    }
+
+    /* Update a Librarian */
+    public LibrarianResponse updateLibrarian(LibrarianRequest librarianRequest) {
+        // Old details, to be update
+        Librarian oldLib = librarianRepo.findAll().stream()
+                .filter((librarian) -> librarian.getEmail().equals(librarianRequest.getEmail()))
+                .findAny().get();
+
+        // If not found, then
+        if (oldLib == null)
+            throw new EntityNotFoundException("User Not Found...");
+
+        // Updating details
+        Librarian lib = mapToLibrarian(librarianRequest);
+        lib.setLibId(oldLib.getLibId());
+        lib.setDate(oldLib.getDate());
+
+        librarianRepo.save(lib); // Deleting old details
+        librarianRepo.delete(oldLib); // Saving new details
+
+        return mapToLibrarianResponse(lib);
+    }
+
+    /* Delete a Librarian */
+    public void deleteLibrarian(String email) {
+        Librarian lib = librarianRepo.findAll().stream().filter((librarian) -> librarian.getEmail().equals(email))
+                .findAny().get();
+
+        if (lib != null) {
+            librarianRepo.delete(lib);
+            return;
+        }
+
+        throw new EntityNotFoundException("User Not Found...");
+    }
+
+    /* Mapping Func : Lib -> LibRes */
     private LibrarianResponse mapToLibrarianResponse(Librarian librarian) {
         return LibrarianResponse.builder()
                 .libId(librarian.getLibId())
@@ -56,26 +96,15 @@ public class LibrarianService {
                 .build();
     }
 
-    public LibrarianResponse getLibrarian(String email) {
-        List<Librarian> librarians = librarianRepo.findAll();
-        LibrarianResponse librarianResponse = null;
-
-        // LibrarianResponse librarianResponse = librarians.stream().map(librarians ->
-        // librarians.getEmail().equals(email))
-        for (Librarian librarian : librarians) {
-            if (librarian.getEmail().equals(email)) {
-                return LibrarianResponse.builder()
-                        .libId(librarian.getLibId())
-                        .name(librarian.getName())
-                        .email(librarian.getEmail())
-                        .password(librarian.getPassword())
-                        .gender(librarian.getGender())
-                        .contact(librarian.getContact())
-                        .date(librarian.getDate())
-                        .build();
-            }
-        }
-        return librarianResponse;
+    /* Mapping Func : LibReq -> Lib */
+    private Librarian mapToLibrarian(LibrarianRequest librarianRequest) {
+        return Librarian.builder()
+                .name(librarianRequest.getName())
+                .email(librarianRequest.getEmail())
+                .password(librarianRequest.getPassword())
+                .gender(librarianRequest.getGender())
+                .contact(librarianRequest.getContact())
+                .build();
     }
 
 }
