@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StudentCtrl {
 
-    private StudentService studentService;
+    private final StudentService studentService;
 
     /* Create a Student */
     @PostMapping

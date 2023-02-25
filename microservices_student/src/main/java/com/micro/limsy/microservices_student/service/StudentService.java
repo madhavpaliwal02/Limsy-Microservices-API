@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StudentService {
 
-    private StudentRepo studentRepo;
+    private final StudentRepo studentRepo;
 
     /* Create a student */
     public void createStudent(StudentRequest studentRequest) {
