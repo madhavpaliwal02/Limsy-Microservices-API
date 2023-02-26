@@ -32,9 +32,7 @@ public class LibrarianService {
 
     /* Get all Librarians */
     public List<LibrarianResponse> getAllLibrarian() {
-        List<Librarian> librarians = librarianRepo.findAll();
-
-        return librarians.stream().map(this::mapToLibrarianResponse).toList();
+        return librarianRepo.findAll().stream().map(this::mapToLibrarianResponse).toList();
     }
 
     /* Get a Librarian */
