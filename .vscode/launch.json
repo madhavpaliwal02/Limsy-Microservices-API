@@ -1,0 +1,45 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MicroservicesLibrarianApplication<microservices_librarian>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.micro.limsy.microservices_librarian.MicroservicesLibrarianApplication",
+            "projectName": "microservices_librarian",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=50813 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=microservices_librarian"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MicroservicesStudentApplication<microservices_student>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.micro.limsy.microservices_student.MicroservicesStudentApplication",
+            "projectName": "microservices_student",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MicroservicesBookApplication<microservices_book>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.micro.limsy.microservices_book.MicroservicesBookApplication",
+            "projectName": "microservices_book",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MicroservicesIssuedbookApplication<microservices_issuedbook>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.micro.limsy.microservices_issuedbook.MicroservicesIssuedbookApplication",
+            "projectName": "microservices_issuedbook",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

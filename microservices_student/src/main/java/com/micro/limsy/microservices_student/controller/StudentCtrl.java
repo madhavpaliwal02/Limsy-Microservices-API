@@ -41,10 +41,10 @@ public class StudentCtrl {
         return studentService.getAllStudents();
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/{studentId}")
     @ResponseStatus(HttpStatus.OK)
-    public StudentResponse getStudent(@PathVariable("email") String email) {
-        return studentService.getStudent(email);
+    public StudentResponse getStudent(@PathVariable("studentId") String studentId) {
+        return studentService.getStudent(studentId);
     }
 
     @PutMapping
@@ -53,10 +53,10 @@ public class StudentCtrl {
         return studentService.updateStudent(studentRequest);
     }
 
-    @DeleteMapping("/{email}")
+    @DeleteMapping("/{studentId}")
     @ResponseStatus(HttpStatus.OK)
-    public String deleteStudent(@PathVariable("email") String email) {
-        studentService.deleteStudent(email);
+    public String deleteStudent(@PathVariable("studentId") String studentId) {
+        studentService.deleteStudent(studentId);
         return "Student Deleted Sucessfully...";
     }
 

@@ -42,10 +42,10 @@ public class LibrarianCtrl {
     }
 
     /* Get a Librarian */
-    @GetMapping("/{email}")
+    @GetMapping("/{librarianId}")
     @ResponseStatus(HttpStatus.OK)
-    public LibrarianResponse getLibrarian(@PathVariable("email") String email) {
-        return librarianService.getLibrarian(email);
+    public LibrarianResponse getLibrarian(@PathVariable("librarianId") String librarianId) {
+        return librarianService.getLibrarian(librarianId);
     }
 
     /* Update a Librarian */
@@ -56,10 +56,10 @@ public class LibrarianCtrl {
     }
 
     /* Delete a Librarian */
-    @DeleteMapping("/{email}")
+    @DeleteMapping("/{librarianId}")
     @ResponseStatus(HttpStatus.OK)
-    public String deleteLibrarian(@PathVariable("email") String email) {
-        librarianService.deleteLibrarian(email);
+    public String deleteLibrarian(@PathVariable("librarianId") String librarianId) {
+        librarianService.deleteLibrarian(librarianId);
         return "Librarian Deleted Successfully...";
     }
 

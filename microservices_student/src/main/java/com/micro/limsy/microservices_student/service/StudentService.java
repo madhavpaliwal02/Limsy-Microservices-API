@@ -38,8 +38,8 @@ public class StudentService {
     }
 
     /* Get a Student */
-    public StudentResponse getStudent(String email) {
-        Student stu = studentRepo.findAll().stream().filter(student -> student.getEmail().equals(email))
+    public StudentResponse getStudent(String studentId) {
+        Student stu = studentRepo.findAll().stream().filter(student -> student.getStuId().equals(studentId))
                 .findAny().get();
 
         if (stu == null)
@@ -68,8 +68,8 @@ public class StudentService {
     }
 
     /* Delete a Student */
-    public void deleteStudent(String email) {
-        Student student = studentRepo.findAll().stream().filter(stu -> stu.getEmail().equals(email))
+    public void deleteStudent(String studentId) {
+        Student student = studentRepo.findAll().stream().filter(stu -> stu.getStuId().equals(studentId))
                 .findAny().get();
 
         if (student == null)

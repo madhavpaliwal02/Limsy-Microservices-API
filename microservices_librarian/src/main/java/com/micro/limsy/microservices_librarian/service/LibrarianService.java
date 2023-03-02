@@ -36,8 +36,8 @@ public class LibrarianService {
     }
 
     /* Get a Librarian */
-    public LibrarianResponse getLibrarian(String email) {
-        Librarian lib = librarianRepo.findAll().stream().filter(librarian -> librarian.getEmail().equals(email))
+    public LibrarianResponse getLibrarian(String librarianId) {
+        Librarian lib = librarianRepo.findAll().stream().filter(librarian -> librarian.getLibId().equals(librarianId))
                 .findAny().get();
 
         if (lib != null)
@@ -69,8 +69,8 @@ public class LibrarianService {
     }
 
     /* Delete a Librarian */
-    public void deleteLibrarian(String email) {
-        Librarian lib = librarianRepo.findAll().stream().filter((librarian) -> librarian.getEmail().equals(email))
+    public void deleteLibrarian(String librarianId) {
+        Librarian lib = librarianRepo.findAll().stream().filter((librarian) -> librarian.getLibId().equals(librarianId))
                 .findAny().get();
 
         if (lib != null) {
