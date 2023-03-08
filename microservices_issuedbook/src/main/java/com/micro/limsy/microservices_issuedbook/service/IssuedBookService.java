@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,6 +34,42 @@ public class IssuedBookService {
         issuedBook.setIBookId(UUID.randomUUID().toString());
         issuedBook.setDate(new Date());
         issuedBookRepo.save(issuedBook);
+    }
+
+    /* Get all IssuedBooks */
+    public List<IssuedBookResponse> getAllIssuedBooks() {
+        List<IssuedBookResponse> IssuedBookResponseList = new ArrayList<>();
+
+        for (IssuedBook ib : issuedBookRepo.findAll()) {
+            Librarian lib = restTemplate.getForObject("http://localhost:8101/api/librarian/" + ib.getLibrarianId(),
+                    Librarian.class);
+            Student stu = restTemplate.getForObject("http://localhost:8102/api/student/" + ib.getStudentId(),
+                    Student.class);
+            Book book = restTemplate.getForObject("http://localhost:8103/api/book/" + ib.getBookId(),
+                    Book.class);
+            IssuedBookResponseList.add(mapToIssuedBookResponse(lib, stu, book, ib));
+        }
+        return IssuedBookResponseList;
+    }
+
+    /* Get a IssuedBook */
+    public IssuedBookResponse getIssuedBook(String ibookId) {
+        IssuedBookResponse issuedBookResponse = getAllIssuedBooks().stream()
+                .filter(ibook -> ibook.getIBookId().equals(ibookId))
+                .findAny().get();
+        if (issuedBookResponse != null)
+            return issuedBookResponse;
+        throw new EntityNotFoundException("IssuedBook not found...");
+    }
+
+    /* Delete a IssuedBook */
+    public void deleteIssuedBook(String ibookId) {
+        IssuedBook issuedBook = issuedBookRepo.findAll().stream()
+                .filter(ibook -> ibook.getIBookId().equals(ibookId))
+                .findAny().get();
+        if (issuedBook == null)
+            throw new EntityNotFoundException("IssuedBook not found...");
+        issuedBookRepo.delete(issuedBook);
     }
 
     /* Mapping Function : IssuedBookRequest -> IssuedBook */
@@ -65,25 +103,8 @@ public class IssuedBookService {
                 .build();
     }
 
-    /* Get all IssuedBooks */
-    public List<IssuedBookResponse> getAllIssuedBooks() {
-        List<IssuedBookResponse> IssuedBookResponseList = new ArrayList<>();
-
-        for (IssuedBook ib : issuedBookRepo.findAll()) {
-            Librarian lib = restTemplate.getForObject("http://localhost:8101/api/librarian/" + ib.getLibrarianId(),
-                    Librarian.class);
-            Student stu = restTemplate.getForObject("http://localhost:8102/api/student/" + ib.getStudentId(),
-                    Student.class);
-            Book book = restTemplate.getForObject("http://localhost:8103/api/book/" + ib.getBookId(),
-                    Book.class);
-            IssuedBookResponseList.add(mapToIssuedBookResponse(lib, stu, book, ib));
-        }
-        return IssuedBookResponseList;
+    public List<IssuedBook> getAllIssueBooks() {
+        return issuedBookRepo.findAll();
     }
 
-
-    public IssuedBookResponse getIssuedBook(String ibookId) {
-        return getAllIssuedBooks().stream().filter(ibook -> ibook.getIBookId().equals(ibookId))
-                .findAny().get();
-    }
 }

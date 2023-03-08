@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
@@ -23,6 +24,15 @@ public class LibrarianService {
 
     /* Create a Librarian */
     public void createLibrarian(LibrarianRequest librarianReq) {
+        // Validating whether librarian exists or not
+        if (librarianRepo.findAll().stream().filter(
+                lib -> lib.getEmail().equals(librarianReq.getEmail())
+                        && lib.getName().equals(librarianReq.getName())
+                        && lib.getPassword().equals(librarianReq.getPassword()))
+                .findAny().isPresent())
+            throw new EntityExistsException();
+
+        // If not found then create one
         Librarian librarian = mapToLibrarian(librarianReq);
         librarian.setLibId(UUID.randomUUID().toString());
         librarian.setDate(new Date());
