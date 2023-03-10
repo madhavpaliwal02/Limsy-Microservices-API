@@ -41,11 +41,11 @@ public class IssuedBookService {
         List<IssuedBookResponse> IssuedBookResponseList = new ArrayList<>();
 
         for (IssuedBook ib : issuedBookRepo.findAll()) {
-            Librarian lib = restTemplate.getForObject("http://localhost:8101/api/librarian/" + ib.getLibrarianId(),
+            Librarian lib = restTemplate.getForObject("http://librarian-service/api/librarian/" + ib.getLibrarianId(),
                     Librarian.class);
-            Student stu = restTemplate.getForObject("http://localhost:8102/api/student/" + ib.getStudentId(),
+            Student stu = restTemplate.getForObject("http://student-serivce/api/student/" + ib.getStudentId(),
                     Student.class);
-            Book book = restTemplate.getForObject("http://localhost:8103/api/book/" + ib.getBookId(),
+            Book book = restTemplate.getForObject("http://book-service/api/book/" + ib.getBookId(),
                     Book.class);
             IssuedBookResponseList.add(mapToIssuedBookResponse(lib, stu, book, ib));
         }
