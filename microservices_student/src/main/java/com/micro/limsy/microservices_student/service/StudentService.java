@@ -3,6 +3,7 @@ package com.micro.limsy.microservices_student.service;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -32,9 +33,7 @@ public class StudentService {
 
     /* Get all Students */
     public List<StudentResponse> getAllStudents() {
-        List<Student> students = studentRepo.findAll();
-
-        return students.stream().map(this::maptoStudentResponse).toList();
+        return studentRepo.findAll().stream().map(this::maptoStudentResponse).collect(Collectors.toList());
     }
 
     /* Get a Student */

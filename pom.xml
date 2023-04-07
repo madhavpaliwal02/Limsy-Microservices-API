@@ -20,7 +20,9 @@
 		<module>microservices_student</module>
 		<module>microservices_book</module>
 		<module>microservices_issuedbook</module>
+		<module>microservices_returnbook</module>
 		<module>discovery_server</module>
+        <module>api_gateway</module>
 	</modules>
 	<properties>
 		<maven.compiler.source>17</maven.compiler.source>

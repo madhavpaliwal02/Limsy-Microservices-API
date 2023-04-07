@@ -43,7 +43,7 @@ public class IssuedBookService {
         for (IssuedBook ib : issuedBookRepo.findAll()) {
             Librarian lib = restTemplate.getForObject("http://librarian-service/api/librarian/" + ib.getLibrarianId(),
                     Librarian.class);
-            Student stu = restTemplate.getForObject("http://student-serivce/api/student/" + ib.getStudentId(),
+            Student stu = restTemplate.getForObject("http://student-service/api/student/" + ib.getStudentId(),
                     Student.class);
             Book book = restTemplate.getForObject("http://book-service/api/book/" + ib.getBookId(),
                     Book.class);
@@ -55,8 +55,9 @@ public class IssuedBookService {
     /* Get a IssuedBook */
     public IssuedBookResponse getIssuedBook(String ibookId) {
         IssuedBookResponse issuedBookResponse = getAllIssuedBooks().stream()
-                .filter(ibook -> ibook.getIBookId().equals(ibookId))
+                .filter(ibookRes -> ibookRes.getIBookId().equals(ibookId))
                 .findAny().get();
+        System.out.println(issuedBookResponse);
         if (issuedBookResponse != null)
             return issuedBookResponse;
         throw new EntityNotFoundException("IssuedBook not found...");
@@ -75,9 +76,9 @@ public class IssuedBookService {
     /* Mapping Function : IssuedBookRequest -> IssuedBook */
     private IssuedBook mapToIssuedBook(IssuedBookRequest issuedBookRequest) {
         return IssuedBook.builder()
-                .studentId(issuedBookRequest.getStudentId())
+                .studentId(issuedBookRequest.getStuId())
                 .bookId(issuedBookRequest.getBookId())
-                .librarianId(issuedBookRequest.getLibrarianId())
+                .librarianId(issuedBookRequest.getLibId())
                 .build();
     }
 
@@ -103,8 +104,18 @@ public class IssuedBookService {
                 .build();
     }
 
+    /* Get all IssuedBook Objects */
     public List<IssuedBook> getAllIssueBooks() {
         return issuedBookRepo.findAll();
+    }
+
+    /* Get a IssuedBook Objects */
+    public IssuedBook getAllIssueBooks(String ibookId) {
+        IssuedBook iBook = getAllIssueBooks().stream().filter(ibook -> ibook.getIBookId().equals(ibookId))
+                .findAny().get();
+        if (iBook == null)
+            throw new EntityNotFoundException("IssuedBook Not Found");
+        return iBook;
     }
 
 }

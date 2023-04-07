@@ -41,18 +41,25 @@ public class IssuedBookCtrl {
         return issuedBookService.getAllIssuedBooks();
     }
 
-    /* Get all IssuedBook */
-    @GetMapping("/ib")
-    @ResponseStatus(HttpStatus.OK)
-    public List<IssuedBook> getAllIssueBooks(){
-        return issuedBookService.getAllIssueBooks();
-    }
-
     /* Get a IssuedBook */
     @GetMapping("/{ibookId}")
     @ResponseStatus(HttpStatus.OK)
     public IssuedBookResponse getIssuedBook(@PathVariable("ibookId") String ibookId) {
         return issuedBookService.getIssuedBook(ibookId);
+    }
+
+    /* Get all IssueBook */
+    @GetMapping("/ib")
+    @ResponseStatus(HttpStatus.OK)
+    public List<IssuedBook> getAllIssueBooks() {
+        return issuedBookService.getAllIssueBooks();
+    }
+
+    /* Get a IssueBook */
+    @GetMapping("/ib/{ibookId}")
+    @ResponseStatus(HttpStatus.OK)
+    public IssuedBook getAllIssueBook(@PathVariable("ibookId") String ibookId) {
+        return issuedBookService.getAllIssueBooks(ibookId);
     }
 
     /* Delete a IssuedBook */

@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>microservices_issuedbook</artifactId>
+    <artifactId>microservices_returnbook</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
