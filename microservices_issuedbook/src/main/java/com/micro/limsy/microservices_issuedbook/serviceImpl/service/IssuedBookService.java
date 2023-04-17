@@ -20,6 +20,7 @@ public interface IssuedBookService {
     /* Delete a IssuedBook */
     public void deleteIssuedBook(String ibookId);
 
+    /***************************** Additional Functions *****************************/
     /* Get all IssuedBook Objects */
     public List<IssuedBook> getAllIssueBooks();
 
@@ -28,4 +29,7 @@ public interface IssuedBookService {
 
     /* Get ALL IssuedBooks for a Librarian */
     public List<IssuedBookResponse> getIssuedBooks_Librarian(String librarianId);
+
+    /* Get all IssuedBooks for a Student */
+    public List<IssuedBook> getIssuedBooks_Student(String studentId);
 }

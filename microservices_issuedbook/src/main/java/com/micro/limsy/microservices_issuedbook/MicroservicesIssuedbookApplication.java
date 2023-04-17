@@ -17,8 +17,8 @@ public class MicroservicesIssuedbookApplication {
 
 	@Bean
 	@LoadBalanced
-    RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+	RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
 
 }

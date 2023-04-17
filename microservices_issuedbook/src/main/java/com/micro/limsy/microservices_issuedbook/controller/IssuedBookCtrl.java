@@ -72,9 +72,17 @@ public class IssuedBookCtrl {
         return issuedBookService.getAllIssueBooks(ibookId);
     }
 
+    /* Get all IssuedBooks for a Librarian */
     @GetMapping("/librarian/{librarianId}")
     @ResponseStatus(HttpStatus.OK)
     public List<IssuedBookResponse> getIssuedBooks_Librarian(@PathVariable("librarianId") String librarianId) {
         return this.issuedBookService.getIssuedBooks_Librarian(librarianId);
+    }
+
+    /* Get all IssuedBooks for a Student */
+    @GetMapping("/student-ib/{studentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<IssuedBook> getIssuedBooks_Student(@PathVariable("studentId") String studentId) {
+        return this.issuedBookService.getIssuedBooks_Student(studentId);
     }
 }

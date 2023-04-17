@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.micro.limsy.microservices_book.dto.BookRequest;
 import com.micro.limsy.microservices_book.dto.BookResponse;
-import com.micro.limsy.microservices_book.service.BookService;
+import com.micro.limsy.microservices_book.serviceImpl.service.BookService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -61,5 +61,14 @@ public class BookCtrl {
     public String deleteBook(@PathVariable("bookId") String bookId) {
         bookService.deleteBook(bookId);
         return "Book Delete Successfully...";
+    }
+
+    /************************** Additional Functions **************************/
+
+    /* Get IssuedBooks for Student */
+    @GetMapping("/student-ib/{studentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookResponse> getIssuedBook_Student(@PathVariable("studentId") String studentId) {
+        return this.bookService.getIssuedBook_Student(studentId);
     }
 }

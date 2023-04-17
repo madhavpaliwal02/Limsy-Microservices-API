@@ -147,6 +147,7 @@ public class IssuedBookServiceImpl implements IssuedBookService {
         return iBook;
     }
 
+    /* Get all IssuedBooks for a Librarian */
     @Override
     public List<IssuedBookResponse> getIssuedBooks_Librarian(String librarianId) {
         // Filtering for a librarian
@@ -165,4 +166,15 @@ public class IssuedBookServiceImpl implements IssuedBookService {
         return list;
     }
 
+    /* Get all IssuedBooks for a Student */
+    @Override
+    public List<IssuedBook> getIssuedBooks_Student(String studentId) {
+        List<IssuedBook> list = new ArrayList<>();
+
+        for (IssuedBook ib : issuedBookRepo.findAll())
+            if (ib.getStudentId().equals(studentId))
+                list.add(ib);
+
+        return list;
+    }
 }
