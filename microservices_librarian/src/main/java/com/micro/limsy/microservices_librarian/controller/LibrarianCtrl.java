@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.micro.limsy.microservices_librarian.dto.IssuedBookResponse;
 import com.micro.limsy.microservices_librarian.dto.LibrarianRequest;
 import com.micro.limsy.microservices_librarian.dto.LibrarianResponse;
-import com.micro.limsy.microservices_librarian.service.LibrarianService;
+import com.micro.limsy.microservices_librarian.serviceImpl.service.LibrarianService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -49,10 +50,11 @@ public class LibrarianCtrl {
     }
 
     /* Update a Librarian */
-    @PutMapping
+    @PutMapping("/{librarianId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public LibrarianResponse updateLibrarian(@RequestBody LibrarianRequest librarianRequest) {
-        return librarianService.updateLibrarian(librarianRequest);
+    public LibrarianResponse updateLibrarian(@PathVariable("librarianId") String librarianId,
+            @RequestBody LibrarianRequest librarianRequest) {
+        return librarianService.updateLibrarian(librarianRequest, librarianId);
     }
 
     /* Delete a Librarian */
@@ -63,4 +65,14 @@ public class LibrarianCtrl {
         return "Librarian Deleted Successfully...";
     }
 
+    /* ************************* Additional Methods ************************ */
+    @GetMapping("/issuedbook/{librarianId}")
+    public List<IssuedBookResponse> getIssuedBooks_Librarian(@PathVariable("librarianId") String librarianId) {
+        return this.librarianService.getIssuedBooks_Librarian(librarianId);
+    }
+
+    @GetMapping("/count")
+    public long getCount() {
+        return this.librarianService.getCount();
+    }
 }

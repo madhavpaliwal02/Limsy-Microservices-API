@@ -1,28 +1,41 @@
-package com.micro.limsy.microservices_librarian.service;
+package com.micro.limsy.microservices_librarian.serviceImpl;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.micro.limsy.microservices_librarian.dto.IssuedBookResponse;
 import com.micro.limsy.microservices_librarian.dto.LibrarianRequest;
 import com.micro.limsy.microservices_librarian.dto.LibrarianResponse;
+import com.micro.limsy.microservices_librarian.exception.ResourceNotFoundException;
 import com.micro.limsy.microservices_librarian.model.Librarian;
 import com.micro.limsy.microservices_librarian.repository.LibrarianRepo;
+import com.micro.limsy.microservices_librarian.serviceImpl.service.LibrarianService;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class LibrarianService {
+public class LibrarianServiceImpl implements LibrarianService {
 
     private final LibrarianRepo librarianRepo;
 
+    private final RestTemplate restTemplate;
+    private String url = "";
+
+    /*
+     * ******************************** CRUD Functions ***************************
+     */
+
     /* Create a Librarian */
+    @Override
     public void createLibrarian(LibrarianRequest librarianReq) {
         // Validating whether librarian exists or not
         if (librarianRepo.findAll().stream().filter(
@@ -41,54 +54,50 @@ public class LibrarianService {
     }
 
     /* Get all Librarians */
+    @Override
     public List<LibrarianResponse> getAllLibrarian() {
-        return librarianRepo.findAll().stream().map(this::mapToLibrarianResponse).toList();
+        return librarianRepo.findAll().stream().map(this::mapToLibrarianResponse).collect(Collectors.toList());
     }
 
     /* Get a Librarian */
+    @Override
     public LibrarianResponse getLibrarian(String librarianId) {
-        Librarian lib = librarianRepo.findAll().stream().filter(librarian -> librarian.getLibId().equals(librarianId))
-                .findAny().get();
-
-        if (lib != null)
-            return mapToLibrarianResponse(lib);
-
-        throw new EntityNotFoundException("User Not Found...");
+        Librarian librarian = getLibrarianById(librarianId);
+        return mapToLibrarianResponse(librarian);
     }
 
     /* Update a Librarian */
-    public LibrarianResponse updateLibrarian(LibrarianRequest librarianRequest) {
+    @Override
+    public LibrarianResponse updateLibrarian(LibrarianRequest librarianRequest, String librarianId) {
         // Old details, to be update
-        Librarian oldLib = librarianRepo.findAll().stream()
-                .filter((librarian) -> librarian.getEmail().equals(librarianRequest.getEmail()))
-                .findAny().get();
-
-        // If not found, then
-        if (oldLib == null)
-            throw new EntityNotFoundException("User Not Found...");
+        Librarian oldLib = getLibrarianById(librarianId);
 
         // Updating details
         Librarian lib = mapToLibrarian(librarianRequest);
         lib.setLibId(oldLib.getLibId());
         lib.setDate(oldLib.getDate());
 
-        librarianRepo.save(lib); // Deleting old details
-        librarianRepo.delete(oldLib); // Saving new details
+        librarianRepo.save(lib); // Saving new details
+        librarianRepo.delete(oldLib); // Deleting old details
 
         return mapToLibrarianResponse(lib);
     }
 
     /* Delete a Librarian */
+    @Override
     public void deleteLibrarian(String librarianId) {
-        Librarian lib = librarianRepo.findAll().stream().filter((librarian) -> librarian.getLibId().equals(librarianId))
-                .findAny().get();
+        Librarian lib = getLibrarianById(librarianId);
+        librarianRepo.delete(lib);
+    }
 
-        if (lib != null) {
-            librarianRepo.delete(lib);
-            return;
-        }
+    /********************************
+     * Helper Functions
+     *******************************/
 
-        throw new EntityNotFoundException("User Not Found...");
+    /* Get Librarian Helper */
+    private Librarian getLibrarianById(String librarianId) {
+        return this.librarianRepo.findAll().stream().filter(lib -> lib.getLibId().equals(librarianId))
+                .findAny().orElseThrow(() -> new ResourceNotFoundException("Librarian", "librarianId", librarianId));
     }
 
     /* Mapping Func : Lib -> LibRes */
@@ -113,6 +122,25 @@ public class LibrarianService {
                 .gender(librarianRequest.getGender())
                 .contact(librarianRequest.getContact())
                 .build();
+    }
+
+    /*
+     ***************************** Additional Functions *****************************
+     */
+
+    /* Get All IssuedBooks for a Librarian : Student + Book */
+    @Override
+    public List<IssuedBookResponse> getIssuedBooks_Librarian(String librarianId) {
+        url = "http://issuedbook-service/api/issuedbook/librarian/" + librarianId;
+        // Getting all Issuedbook objects
+        IssuedBookResponse[] ibr = restTemplate.getForObject(url, IssuedBookResponse[].class);
+        return Arrays.asList(ibr);
+    }
+
+    /* Get count for Librarians */
+    @Override
+    public long getCount() {
+        return this.librarianRepo.count();
     }
 
 }

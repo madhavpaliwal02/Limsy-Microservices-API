@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.micro.limsy.microservices_issuedbook.dto.IssuedBookRequest;
 import com.micro.limsy.microservices_issuedbook.dto.IssuedBookResponse;
 import com.micro.limsy.microservices_issuedbook.model.IssuedBook;
-import com.micro.limsy.microservices_issuedbook.service.IssuedBookService;
+import com.micro.limsy.microservices_issuedbook.serviceImpl.service.IssuedBookService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -48,6 +48,16 @@ public class IssuedBookCtrl {
         return issuedBookService.getIssuedBook(ibookId);
     }
 
+    /* Delete a IssuedBook */
+    @DeleteMapping("/{ibookId}")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteIssuedBook(@PathVariable("ibookId") String ibookId) {
+        issuedBookService.deleteIssuedBook(ibookId);
+        return "IssuedBook Deleted Successfully...";
+    }
+
+    /************************ Additional Functions ************************/
+
     /* Get all IssueBook */
     @GetMapping("/ib")
     @ResponseStatus(HttpStatus.OK)
@@ -62,12 +72,9 @@ public class IssuedBookCtrl {
         return issuedBookService.getAllIssueBooks(ibookId);
     }
 
-    /* Delete a IssuedBook */
-    @DeleteMapping("/{ibookId}")
+    @GetMapping("/librarian/{librarianId}")
     @ResponseStatus(HttpStatus.OK)
-    public String deleteIssuedBook(@PathVariable("ibookId") String ibookId) {
-        issuedBookService.deleteIssuedBook(ibookId);
-        return "IssuedBook Deleted Successfully...";
+    public List<IssuedBookResponse> getIssuedBooks_Librarian(@PathVariable("librarianId") String librarianId) {
+        return this.issuedBookService.getIssuedBooks_Librarian(librarianId);
     }
-
 }
