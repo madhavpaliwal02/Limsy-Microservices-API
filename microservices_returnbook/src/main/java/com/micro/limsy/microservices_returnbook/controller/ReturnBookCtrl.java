@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.micro.limsy.microservices_returnbook.dto.ReturnBookResponse;
 import com.micro.limsy.microservices_returnbook.model.ReturnBook;
-import com.micro.limsy.microservices_returnbook.service.ReturnBookService;
+import com.micro.limsy.microservices_returnbook.serviceImpl.ReturnBookServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReturnBookCtrl {
 
-    private final ReturnBookService returnBookService;
+    private final ReturnBookServiceImpl returnBookService;
 
     /* Return a Book */
     @PostMapping("/{iBookId}")
@@ -45,6 +45,16 @@ public class ReturnBookCtrl {
         return returnBookService.getReturnBook(rBookId);
     }
 
+    /* Delete a Return Book */
+    @DeleteMapping("/{rBookId}")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteReturnBook(@PathVariable("rBookId") String rBookId) {
+        returnBookService.deleteReturnBook(rBookId);
+        return "Deleted Successfully...";
+    }
+
+    /************************ Additional Functions ************************/
+
     /* Get All Returned Books */
     @GetMapping("/rb")
     @ResponseStatus(HttpStatus.OK)
@@ -52,11 +62,18 @@ public class ReturnBookCtrl {
         return returnBookService.getAllReturnedBooks();
     }
 
-    @DeleteMapping("/{rBookId}")
+    /* Get a Returned Books */
+    @GetMapping("/rb/{rBookId}")
     @ResponseStatus(HttpStatus.OK)
-    public String deleteReturnBook(@PathVariable("rBookId") String rBookId) {
-        returnBookService.deleteReturnBook(rBookId);
-        return "Deleted Successfully...";
+    public ReturnBook getReturnedBooks(@PathVariable("rBookId") String rBookId) {
+        return returnBookService.getReturnedBooks(rBookId);
+    }
+
+    @GetMapping("/count")
+    @ResponseStatus(HttpStatus.OK)
+    /* Get Count for ReturnBooks */
+    public long getCount() {
+        return this.returnBookService.getCount();
     }
 
 }

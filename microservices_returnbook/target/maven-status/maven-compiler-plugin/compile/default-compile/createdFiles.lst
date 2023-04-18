@@ -1,4 +1,4 @@
-com\micro\limsy\microservices_returnbook\service\ReturnBookService.class
+com\micro\limsy\microservices_returnbook\serviceImpl\ReturnBookServiceImpl.class
 com\micro\limsy\microservices_returnbook\model\Student.class
 com\micro\limsy\microservices_returnbook\dto\ReturnBookResponse.class
 com\micro\limsy\microservices_returnbook\model\Student$StudentBuilder.class
@@ -15,4 +15,5 @@ com\micro\limsy\microservices_returnbook\model\ReturnBook$ReturnBookBuilder.clas
 com\micro\limsy\microservices_returnbook\model\Librarian$LibrarianBuilder.class
 com\micro\limsy\microservices_returnbook\model\Librarian.class
 com\micro\limsy\microservices_returnbook\dto\ReturnBookRequest$ReturnBookRequestBuilder.class
+com\micro\limsy\microservices_returnbook\serviceImpl\service\ReturnBookService.class
 com\micro\limsy\microservices_returnbook\controller\ReturnBookCtrl.class

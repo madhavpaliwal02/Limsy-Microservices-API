@@ -25,4 +25,7 @@ public interface BookService {
     /************************** Additional Functions **************************/
     /* Get IssuedBooks for Student */
     public List<BookResponse> getIssuedBook_Student(String studentId);
+
+    /* Get Count for books available */
+    public long getCount();
 }

@@ -71,4 +71,11 @@ public class BookCtrl {
     public List<BookResponse> getIssuedBook_Student(@PathVariable("studentId") String studentId) {
         return this.bookService.getIssuedBook_Student(studentId);
     }
+
+    /* Get count for books */
+    @GetMapping("/count")
+    @ResponseStatus(HttpStatus.OK)
+    public long getCount() {
+        return this.bookService.getCount();
+    }
 }

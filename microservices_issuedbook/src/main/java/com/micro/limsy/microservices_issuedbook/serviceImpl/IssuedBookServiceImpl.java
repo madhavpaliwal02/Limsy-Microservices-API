@@ -177,4 +177,11 @@ public class IssuedBookServiceImpl implements IssuedBookService {
 
         return list;
     }
+
+    /* Get Count for IssuedBooks */
+    @Override
+    public long getCount() {
+        return this.issuedBookRepo.count();
+    }
+
 }

@@ -85,4 +85,12 @@ public class IssuedBookCtrl {
     public List<IssuedBook> getIssuedBooks_Student(@PathVariable("studentId") String studentId) {
         return this.issuedBookService.getIssuedBooks_Student(studentId);
     }
+
+    /************************ Additional Functions ************************/
+    /* Get Count for IssuedBooks */
+    @GetMapping("/count")
+    @ResponseStatus(HttpStatus.OK)
+    public long getCount() {
+        return this.issuedBookService.getCount();
+    }
 }

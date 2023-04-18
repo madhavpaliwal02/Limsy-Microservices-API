@@ -32,4 +32,7 @@ public interface IssuedBookService {
 
     /* Get all IssuedBooks for a Student */
     public List<IssuedBook> getIssuedBooks_Student(String studentId);
+
+    /* Get Count for IssuedBooks */
+    public long getCount();
 }

@@ -25,7 +25,7 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepo bookRepo;
     private final RestTemplate restTemplate;
-    private static String url ="";
+    private static String url = "";
 
     /* Create a Book */
     @Override
@@ -139,4 +139,11 @@ public class BookServiceImpl implements BookService {
         }
         return list;
     }
+
+    /* Get count for books */
+    @Override
+    public long getCount() {
+        return this.bookRepo.count();
+    }
+
 }
